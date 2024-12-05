@@ -14,8 +14,7 @@ servers:
     url: https://TD1-PROG3/1.0.0
 info:
   version: "1.0.0"
-  title: home-iot-api
-  description: The API for the EatBacon IOT project
+  title: Student-management
 paths:
   /groups:
     get:
