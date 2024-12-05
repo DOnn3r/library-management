@@ -1,213 +1,171 @@
-openapi: 3.1.0
+openapi: 3.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  # Added by API Auto Mocking Plugin
+  # Added by API Auto Mocking Plugin
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/HEIJAONARISON/TD-PROG3/1.0.0
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/HEIJAONARISON/TD1-PROG3/1.0.0
+  - description: SwaggerHub API Auto Mocking
+    url: https://HEIJAONARISON/TD1-PROG3/1.0.0
+  - description: SwaggerHub API Auto Mocking
+    url: https://TD1-PROG3/1.0.0
 info:
-  title: Library Management API
-  description: API specification for managing books and authors in a library.
-  version: 1.0.0-oas3.1
+  version: "1.0.0"
+  title: home-iot-api
+  description: The API for the EatBacon IOT project
 paths:
-  /books:
+  /groups:
     get:
-      summary: Retrieve a list of books
+      summary: Retrieve a list of groups
       parameters:
-      - name: bookName
-        in: query
-        description: Filter books by name
-        required: false
-        schema:
-          type: string
-      - name: releaseDate
-        in: query
-        description: Filter books by a release date range
-        required: false
-        schema:
-          type: string
-          format: date
+        - name: groupeName
+          in: query
+          description: Filter groups by name
+          required: false
+          schema:
+            type: string
       responses:
-        "200":
-          description: List of books retrieved successfully
+        '200':
+          description: List of groups retrieved successfully
     post:
-      summary: Add a new book
+      summary: Add a new group
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                id:
-                  type: string
-                bookName:
-                  type: string
-                author:
-                  type: string
-                pageNumbers:
-                  type: integer
-                topic:
-                  type: string
-                  enum:
-                  - ROMANCE
-                  - COMEDY
-                  - OTHER
-                releaseDate:
-                  type: string
-                  format: date
-              required:
-              - bookName
-              - author
+              $ref: '#/components/schemas/Group'
       responses:
-        "201":
-          description: Book created successfully
+        '201':
+          description: group created successfully
     put:
-      summary: Update an existing book
+      summary: Update an existing group
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                id:
-                  type: string
-                bookName:
-                  type: string
-                author:
-                  type: string
-                pageNumbers:
-                  type: integer
-                topic:
-                  type: string
-                  enum:
-                  - ROMANCE
-                  - COMEDY
-                  - OTHER
-                releaseDate:
-                  type: string
-                  format: date
-              required:
-              - bookName
-              - author
+              $ref: '#/components/schemas/Group'
       responses:
-        "200":
-          description: Book updated successfully
+        '200':
+          description: Group updated successfully
     delete:
-      summary: Delete a book by ID
+      summary: Delete a group by ID
       parameters:
-      - name: id
-        in: query
-        required: true
-        schema:
-          type: string
+        - name: groupName
+          in: query
+          required: true
+          schema:
+            type: string
       responses:
-        "204":
-          description: Book deleted successfully
-  /authors:
+        '204':
+          description: Group deleted successfully
+  /students:
     get:
-      summary: Retrieve a list of authors
+      summary: Retrieve a list of students
       parameters:
-      - name: authorName
-        in: query
-        description: Filter authors by name
-        required: false
-        schema:
-          type: string
+        - name: name
+          in: query
+          description: Filter students by name
+          schema:
+            type: string
       responses:
-        "200":
-          description: List of authors retrieved successfully
+        '200':
+          description: List of students retrieved successfully
+
     post:
-      summary: Add a new author
+      summary: Add a new student
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                id:
-                  type: string
-                name:
-                  type: string
-                sex:
-                  type: string
-                  enum:
-                  - M
-                  - F
-              required:
-              - name
-              - sex
+              $ref: '#/components/schemas/Student'
       responses:
-        "201":
-          description: Author created successfully
+        '201':
+          description: Students created successfully
     put:
-      summary: Update an existing author
+      summary: Update an existing student
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                id:
-                  type: string
-                name:
-                  type: string
-                sex:
-                  type: string
-                  enum:
-                  - M
-                  - F
-              required:
-              - name
-              - sex
+              $ref: '#/components/schemas/Student'
       responses:
-        "200":
-          description: Author updated successfully
+        '200':
+          description: Student updated successfully
     delete:
-      summary: Delete an author by ID
+      summary: Delete an Student by reference
       parameters:
-      - name: id
-        in: query
-        required: true
-        schema:
-          type: string
+        - name: reference
+          in: query
+          required: true
+          schema:
+            type: string
       responses:
-        "204":
-          description: Author deleted successfully
+        '204':
+          description: Student deleted successfully
+  /students/group:
+    get:
+      summary: Retrieve students in the same group
+      parameters:
+        - name: groupName
+          in: query
+          description: Filter students by group name
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of students in the specified group retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Student'
+        '404':
+          description: Group not found
 components:
   schemas:
-    Book:
+    Group:
       type: object
       properties:
-        id:
+        groupName:
           type: string
-        bookName:
-          type: string
-        author:
-          type: string
-        pageNumbers:
+        year:
           type: integer
-        topic:
+        promotion:
           type: string
           enum:
-          - ROMANCE
-          - COMEDY
-          - OTHER
-        releaseDate:
-          type: string
-          format: date
-      required:
-      - bookName
-      - author
-    Author:
+            - G
+            - H
+            - J
+            - K
+        totalStudentNumber:
+          type: integer
+        student:
+          type: array
+          items:
+            $ref: '#/components/schemas/Student'
+    Student:
       type: object
       properties:
-        id:
-          type: string
         name:
           type: string
         sex:
           type: string
           enum:
-          - M
-          - F
-      required:
-      - name
-      - sex
+            - M
+            - F
+        birthdate:
+          type: string
+        reference:
+          type: string
+        group:
+          items:
+            $ref: '#/components/schemas/Group'
