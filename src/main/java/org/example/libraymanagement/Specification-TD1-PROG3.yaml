@@ -5,7 +5,7 @@ servers:
   # Added by API Auto Mocking Plugin
   # Added by API Auto Mocking Plugin
   - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/HEIJAONARISON/TD-PROG3/1.0.0
+    url: https://virtserver.swaggerhub.com/HEIJAONARISON/TD-PROG3/1.1.0
   - description: SwaggerHub API Auto Mocking
     url: https://virtserver.swaggerhub.com/HEIJAONARISON/TD1-PROG3/1.0.0
   - description: SwaggerHub API Auto Mocking
@@ -13,8 +13,9 @@ servers:
   - description: SwaggerHub API Auto Mocking
     url: https://TD1-PROG3/1.0.0
 info:
-  version: "1.0.0"
-  title: Student-management
+  version: "1.1.0"
+  title: home-iot-api
+  description: The API for the EatBacon IOT project
 paths:
   /groups:
     get:
@@ -36,7 +37,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Group'
+              $ref: '#/components/schemas/CreateGroup'
       responses:
         '201':
           description: group created successfully
@@ -82,7 +83,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Student'
+              $ref: '#/components/schemas/CreateStudent'
       responses:
         '201':
           description: Students created successfully
@@ -108,13 +109,12 @@ paths:
       responses:
         '204':
           description: Student deleted successfully
-  /students/group:
+  /students/{reference}/group:
     get:
       summary: Retrieve students in the same group
       parameters:
-        - name: groupName
-          in: query
-          description: Filter students by group name
+        - name: reference
+          in: path
           required: true
           schema:
             type: string
@@ -129,11 +129,73 @@ paths:
                   $ref: '#/components/schemas/Student'
         '404':
           description: Group not found
+    put:
+      summary: Modified one student
+      parameters:
+        - name: reference
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Student'
+      responses:
+        '200':
+          description: The modification is a success
+  /students/group:
+    put:
+      summary: changes the group of people in the same group
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Student'
+              properties:
+                reference:
+                  type: string
+                groupId:
+                  type: integer
+                  items:
+                    $ref: '#/components/schemas/Group'
+      responses:
+        '200':
+          description: List of student modified
+  /students/{reference}/groups/{groupID}:
+    put:
+      parameters:
+        - name: reference
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: groupID
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Student'
+      responses:
+        '200':
+          description: The modification is a success
 components:
   schemas:
     Group:
       type: object
       properties:
+        groupId:
+          type: integer
         groupName:
           type: string
         year:
@@ -168,3 +230,11 @@ components:
         group:
           items:
             $ref: '#/components/schemas/Group'
+    CreateStudent:
+      allOf:
+        - $ref: '#/components/schemas/Student'
+        - type: object
+    CreateGroup:
+      allOf:
+        - $ref: '#/components/schemas/Group'
+        - type: object
